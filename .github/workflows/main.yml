@@ -1,35 +1,20 @@
-name: CI/CD Pipeline
+name: CI/CD
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+push:
+  branches:
+    - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+build:
+  runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.x' 
-
-      - name: Run tests
-        run: |
-          pytest
-
-      - name: Deploy to staging (example)
-        if: github.ref == 'refs/heads/main'
-        run: |
-          echo "Desplegando a staging..."
-          # Comandos para desplegar a tu entorno de staging
-
-      - name: Deploy to production (example)
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          echo "Desplegando a producción..."
-          # Comandos para desplegar a tu entorno de producción
+  steps:
+  - uses: actions/checkout@v2
+  - name: Configurar Node.js
+    uses: actions/setup-node@v2
+    with:
+      node-version: '14'
+  - run: npm install
+  - run: npm test
+  - run: npm run build
